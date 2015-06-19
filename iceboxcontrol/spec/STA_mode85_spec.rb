@@ -661,7 +661,6 @@ describe 'iceboxcontrol_STA_mode' do
 
       context 'foodmanage_page' do
          before :all do
-            # @login_button.click
             login(@username,@old_password)
             sleep 5
             enter_wkzx_page()
@@ -697,7 +696,7 @@ describe 'iceboxcontrol_STA_mode' do
                expect(exists{food}).to be false
             end
          end
-         context 'food add page' do
+         context 'food_add page' do
             before :each do
                enter_foodadd_page()
                @foodadd_title = id('com.iceboxcontrol:id/foodadd_title')
@@ -785,7 +784,7 @@ describe 'iceboxcontrol_STA_mode' do
                expect(exists{id('com.iceboxcontrol:id/foodadd_item_text')}).to be false
             end
             it 'search do not work with blank before food name' do
-               foodadd_search(foodname = ' 豆腐')#空格为转义字符，不能用双引号
+               foodadd_search(foodname = '\\s豆腐')#空格为转义字符，不能用双引号
                expect(exists{id('com.iceboxcontrol:id/foodadd_item_text')}).to be false
             end
             it 'search do not work with blank between food name' do
@@ -913,7 +912,7 @@ describe 'iceboxcontrol_STA_mode' do
             end
          end
 
-         context 'foodmanage_foodlist page'do
+         context 'food_list page'do
             it 'check foodlist for each categary have been successful added'do
                expect(id('com.iceboxcontrol:id/foodmanage_categary_list').displayed?).to be true
                expect(text_exact('剩菜').displayed?).to be true
@@ -934,7 +933,7 @@ describe 'iceboxcontrol_STA_mode' do
             end
          end
 
-         context 'foodadd_edit page'do
+         context 'food_edit page'do
             before :each do
                text('鹅').click
                @foodedit_detail_back = id('com.iceboxcontrol:id/foodmanage_back')
@@ -967,11 +966,6 @@ describe 'iceboxcontrol_STA_mode' do
                expect(ids('com.iceboxcontrol:id/food_spinner')[1].displayed?).to be true
                button('完成').click
             end
-            it 'change alert should not appear expect changes taken'do
-               button('编辑').click
-               button('完成').click
-               expect(@foodmanage_title.displayed?).to be true
-            end
             it 'changes take no effect if canceled' do
                button('编辑').click
                ids('com.iceboxcontrol:id/food_spinner')[0].click
@@ -979,6 +973,11 @@ describe 'iceboxcontrol_STA_mode' do
                button('完成').click
                button('取消').click
                expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('个')
+            end
+            it 'change alert should not appear expect changes taken'do
+               button('编辑').click
+               button('完成').click
+               expect(@foodmanage_title.displayed?).to be true
             end
             it 'food number can be edit' do
                button('编辑').click

@@ -209,11 +209,6 @@ describe 'iceboxcontrol_STA_mode' do
                expect(ids('com.iceboxcontrol:id/food_spinner')[1].displayed?).to be true
                button('完成').click
             end
-            it 'change alert should not appear expect changes taken'do
-               button('编辑').click
-               button('完成').click
-               expect(@foodmanage_title.displayed?).to be true
-            end
             it 'changes take no effect if canceled' do
                button('编辑').click
                ids('com.iceboxcontrol:id/food_spinner')[0].click
@@ -221,6 +216,11 @@ describe 'iceboxcontrol_STA_mode' do
                button('完成').click
                button('取消').click
                expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('个')
+            end
+            it 'change alert should not appear expect changes taken'do
+               button('编辑').click
+               button('完成').click
+               expect(@foodmanage_title.displayed?).to be true
             end
             it 'food number can be edit' do
                button('编辑').click
@@ -257,7 +257,6 @@ describe 'iceboxcontrol_STA_mode' do
                expect(@foodedit_detail_foodmode.attribute('checked')).to eq('true')
                @foodedit_detail_back.click
             end
-
          end
       end
    end
