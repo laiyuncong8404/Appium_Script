@@ -826,7 +826,7 @@ describe 'iceboxcontrol_STA_mode' do
                end
                it 'check foodadd_detail page elements'do
                   expect(@foodadd_detail_title.text).to eq('食品录入')
-                  expect(@foodadd_confirm.displayed?).to be true                  
+                  expect(@foodadd_confirm.displayed?).to be true
                   expect(@foodadd_detail_back.displayed?).to be true
                   expect(@foodadd_detail_foodname.displayed?).to be true
                   expect(@foodadd_detail_foodnum.displayed?).to be true
@@ -849,7 +849,7 @@ describe 'iceboxcontrol_STA_mode' do
                   expect(text_exact('个').displayed?).to be true
                   expect(text_exact('克').displayed?).to be true
                   expect(text_exact('千克').displayed?).to be true
-                  expect(text_exact('毫升').displayed?).to be true                  
+                  expect(text_exact('毫升').displayed?).to be true
                end
                it 'foodadd_detail unit should unfold automatic'do
                   expect(exists{text('克')}).to be false
@@ -910,6 +910,110 @@ describe 'iceboxcontrol_STA_mode' do
                      button('取消').click
                   end
                end
+            end
+         end
+
+         context 'foodmanage_foodlist page'do
+            it 'check foodlist for each categary have been successful added'do
+               expect(id('com.iceboxcontrol:id/foodmanage_categary_list').displayed?).to be true
+               expect(text_exact('剩菜').displayed?).to be true
+               expect(text_exact('鹅').displayed?).to be true
+               expect(text_exact('植物黄油').displayed?).to be true
+               expect(text_exact('章鱼').displayed?).to be true
+               expect(text_exact('枣').displayed?).to be true
+            end
+            it 'foodlist can swipe'do
+               2.times {swipe(start_x:200, start_y:1750, end_x:200, end_y:360, duration:3000)}
+               expect(text_exact('板栗').displayed?).to be true
+               expect(text_exact('紫花菜').displayed?).to be true
+               expect(text_exact('鹌鹑蛋').displayed?).to be true
+               expect(text('真空包装').displayed?).to be true #字符显示不全，长度限制：5
+               expect(text_exact('茶饮料').displayed?).to be true
+               expect(text_exact('冰激凌').displayed?).to be true
+               2.times {swipe(start_x:200, start_y:360, end_x:200, end_y:1750, duration:3000)}
+            end
+         end
+
+         context 'foodadd_edit page'do
+            before :each do
+               text('鹅').click
+               @foodedit_detail_back = id('com.iceboxcontrol:id/foodmanage_back')
+               @foodedit_detail_foodmode = id('com.iceboxcontrol:id/foodmanage_detail_foodmode')
+               @foodmanage_delete_button = id('com.iceboxcontrol:id/foodmanage_delete')
+            end
+            after :each do
+               sleep 2
+            end
+            it 'edit button and delete button should be displayed'do
+               begin
+                  expect(button('编辑').displayed?).to be true
+                  expect(@foodmanage_delete_button.displayed?).to be true
+               ensure
+                  @foodedit_detail_back.click
+               end
+            end
+            it 'foodmode is un-checkable before click edit button' do
+               begin
+                  @foodedit_detail_foodmode.click
+                  sleep 2
+                  expect(@foodedit_detail_foodmode.attribute('checked')).to eq('false')
+               ensure
+                  @foodedit_detail_back.click
+               end
+            end
+            it 'check elements after click edit button' do
+               button('编辑').click
+               expect(button('完成').displayed?).to be true
+               expect(ids('com.iceboxcontrol:id/food_spinner')[1].displayed?).to be true
+               button('完成').click
+            end
+            it 'change alert should not appear expect changes taken'do
+               button('编辑').click
+               button('完成').click
+               expect(@foodmanage_title.displayed?).to be true
+            end
+            it 'changes take no effect if canceled' do
+               button('编辑').click
+               ids('com.iceboxcontrol:id/food_spinner')[0].click
+               text('毫升').click
+               button('完成').click
+               button('取消').click
+               expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('个')
+            end
+            it 'food number can be edit' do
+               button('编辑').click
+               id('com.iceboxcontrol:id/foodmanage_detail_foodnum_input').clear
+               id('com.iceboxcontrol:id/foodmanage_detail_foodnum_input').type rand(1..100)
+               button('完成').click
+               button('确定').click
+            end
+            it 'food unit can be edit' do
+               button('编辑').click
+               ids('com.iceboxcontrol:id/food_spinner')[0].click
+               text('千克').click
+               button('完成').click
+               button('确定').click
+               expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('千克')
+            end
+            it 'food mode can be edit' do
+               button('编辑').click
+               ids('com.iceboxcontrol:id/food_spinner')[1].click
+               text('冷冻室').click
+               button('完成').click
+               button('确定').click
+            end
+            it 'foodmode is checkable after click edit button' do
+               button('编辑').click
+               ids('com.iceboxcontrol:id/food_spinner')[1].click
+               text('冷藏室').click
+               @foodedit_detail_foodmode.click
+               sleep 2
+               button('完成').click
+               button('确定').click
+               expect(id('com.iceboxcontrol:id/foodmanage_item_mode').displayed?).to be true
+               text('鹅').click
+               expect(@foodedit_detail_foodmode.attribute('checked')).to eq('true')
+               @foodedit_detail_back.click
             end
          end
       end
