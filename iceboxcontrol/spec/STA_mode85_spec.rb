@@ -769,11 +769,19 @@ describe 'iceboxcontrol_STA_mode' do
                   swipe_food_categary_to_visible()
                   text(categary2_name).click
                   4.times {swipe_food_to_visibel()}
-                  # last_ele('android.widget.TextView').click
+                  # last_ele('android.widget.TextView').click #有bug，可能被handle挡住
                   ele = ids('com.iceboxcontrol:id/foodadd_item_img')
                   last_ele = ele[-1].click
                   add_food()
                end
+            end
+         end
+         context 'foodadd search_page' do
+            before :each do
+               enter_foodadd_page()
+            end
+            after :each do
+               back_from_foodadd_page_to_foodmanage_page()
             end
             it 'search do not work with full blank' do
                foodadd_search(foodname = "  ")
@@ -784,7 +792,7 @@ describe 'iceboxcontrol_STA_mode' do
                expect(exists{id('com.iceboxcontrol:id/foodadd_item_text')}).to be false
             end
             it 'search do not work with blank before food name' do
-               foodadd_search(foodname = '\\s豆腐')#空格为转义字符，不能用双引号
+               foodadd_search(foodname = " 豆腐") #直接输入空格或转义字符无效，此处应为官方Bug，实际输入了Unicode
                expect(exists{id('com.iceboxcontrol:id/foodadd_item_text')}).to be false
             end
             it 'search do not work with blank between food name' do
@@ -804,124 +812,122 @@ describe 'iceboxcontrol_STA_mode' do
                foodadd_search(foodname = "果冻")
                expect(exists{id('com.iceboxcontrol:id/foodadd_item_text')}).to be false
             end
-            context 'food add detail page' do
-               before :each do
-                  text('蔬菜').click
-                  id('com.iceboxcontrol:id/foodadd_item_img').click
-                  sleep 1
-                  @foodadd_detail_title = id('com.iceboxcontrol:id/foodadd_detail_title')
-                  @foodadd_detail_back = id('com.iceboxcontrol:id/foodadd_detail_back')
-                  @foodadd_confirm = id('com.iceboxcontrol:id/foodadd_confirm')
-                  @foodadd_detail_foodname = id('com.iceboxcontrol:id/foodadd_detail_foodname')
-                  @foodadd_detail_foodnum = id('com.iceboxcontrol:id/foodadd_detail_foodnum')
-                  @foodadd_detail_foodlife = id('com.iceboxcontrol:id/foodadd_detail_foodlife')
-                  @foodadd_detail_fooddate = id('com.iceboxcontrol:id/foodadd_detail_fooddate')
-                  @foodadd_detail_foodmode = id('com.iceboxcontrol:id/foodadd_detail_foodmode')
-                  @foodadd_detail_spinner = ids('com.iceboxcontrol:id/food_spinner') #下拉框图标
-               end
-               after :each do
-                  @foodadd_detail_back.click
-                  sleep 1
-               end
-               it 'check foodadd_detail page elements'do
-                  expect(@foodadd_detail_title.text).to eq('食品录入')
-                  expect(@foodadd_confirm.displayed?).to be true
-                  expect(@foodadd_detail_back.displayed?).to be true
-                  expect(@foodadd_detail_foodname.displayed?).to be true
-                  expect(@foodadd_detail_foodnum.displayed?).to be true
-                  expect(@foodadd_detail_foodlife.displayed?).to be true
-                  expect(@foodadd_detail_fooddate.displayed?).to be true
-                  expect(@foodadd_detail_foodmode.displayed?).to be true
-               end
-               it 'foodadd_detail confirm add before set number'do
-                  @foodadd_confirm.click
-                  expect(@foodadd_confirm.displayed?).to be true
-               end
-               it 'foodadd_detail number is set to zero'do
-                  @foodadd_detail_foodnum.clear
-                  @foodadd_detail_foodnum.type 0
-                  @foodadd_confirm.click
-                  expect(@foodadd_confirm.displayed?).to be true
-               end
-               it 'foodadd_detail unit have four values'do
-                  @foodadd_detail_spinner[0].click
-                  expect(text_exact('个').displayed?).to be true
-                  expect(text_exact('克').displayed?).to be true
-                  expect(text_exact('千克').displayed?).to be true
-                  expect(text_exact('毫升').displayed?).to be true
-               end
-               it 'foodadd_detail unit should unfold automatic'do
-                  expect(exists{text('克')}).to be false
-               end
-               it 'foodadd_detail mode have two values for #560 series'do
-                  2.times {@foodadd_detail_spinner[1].click}
-                  expect(text_exact('冷藏室').displayed?).to be true
-                  expect(text_exact('冷冻室').displayed?).to be true
-               end
-               it 'foodadd_detail mode should unfold automatic'do
-                  expect(exists{text('冷冻室')}).to be false
-               end
+         end
+         context 'foodadd detail_page' do
+            before :each do
+               enter_foodadd_detail_page()
+               @foodadd_detail_title = id('com.iceboxcontrol:id/foodadd_detail_title')
+               @foodadd_detail_back = id('com.iceboxcontrol:id/foodadd_detail_back')
+               @foodadd_confirm = id('com.iceboxcontrol:id/foodadd_confirm')
+               @foodadd_detail_foodname = id('com.iceboxcontrol:id/foodadd_detail_foodname')
+               @foodadd_detail_foodnum = id('com.iceboxcontrol:id/foodadd_detail_foodnum')
+               @foodadd_detail_foodlife = id('com.iceboxcontrol:id/foodadd_detail_foodlife')
+               @foodadd_detail_fooddate = id('com.iceboxcontrol:id/foodadd_detail_fooddate')
+               @foodadd_detail_foodmode = id('com.iceboxcontrol:id/foodadd_detail_foodmode')
+               @foodadd_detail_spinner = ids('com.iceboxcontrol:id/food_spinner') #下拉框图标
             end
-            context 'food add page->voiceInput page' do
-               before :each do
-                  @foodadd_voiceinput.click
-                  sleep 3
-               end
-               it 'check the voiceInput page elements' do
-                  expect(id('android:id/alertTitle').text).to include('语音添加提示')
-                  expect(id('android:id/message').text).to include ('例如')
-                  expect(button('确定').displayed?).to be true
-                  expect(button('取消').displayed?).to be true
-                  button('取消').click
-                  expect(@foodadd_title.displayed?).to be true
-               end
-               context 'voiceInput->speak page' do
-                  before :each do
-                     button('确定').click
-                  end
-                  it 'check voiceInput->speak page elements' do
-                     expect(text('讯飞语音使用帮助').displayed?).to be true
-                     expect(text('安静环境').displayed?).to be true
-                     expect(text('科大讯飞').displayed?).to be true
-                     expect(button('知道了').displayed?).to be true
-                     expect(button('详细').displayed?).to be true
-                     button('知道了').click
-                     expect(text('请说出内容').displayed?).to be true
-                     expect(button('说完了').displayed?).to be true
-                     expect(button('取消').displayed?).to be true
-                     button('取消').click
-                     expect(@foodadd_title.displayed?).to be true
-                  end
-                  it 'click button before speak any word' do
-                     button('说完了').click
-                     expect(button('重新说话').displayed?).to be true
-                     button('取消').click
-                  end
-                  it 'cancel re-speak'do
-                     button('说完了').click
-                     button('取消').click
-                     expect(@foodadd_title.displayed?).to be true
-                  end
-                  it 'respeak does work'do
-                     button('说完了').click
-                     button('重新说话').click
-                     expect(button('说完了').displayed?).to be true
-                     button('取消').click
-                  end
-               end
+            after :each do
+               back_from_foodadd_detail_page_to_foodmanage_page()
+            end
+            it 'check foodadd_detail page elements'do
+               expect(@foodadd_detail_title.text).to eq('食品录入')
+               expect(@foodadd_confirm.displayed?).to be true
+               expect(@foodadd_detail_back.displayed?).to be true
+               expect(@foodadd_detail_foodname.displayed?).to be true
+               expect(@foodadd_detail_foodnum.displayed?).to be true
+               expect(@foodadd_detail_foodlife.displayed?).to be true
+               expect(@foodadd_detail_fooddate.displayed?).to be true
+               expect(@foodadd_detail_foodmode.displayed?).to be true
+            end
+            it 'foodadd_detail confirm add before set number'do
+               @foodadd_confirm.click
+               expect(@foodadd_confirm.displayed?).to be true
+            end
+            it 'foodadd_detail number is set to zero'do
+               @foodadd_detail_foodnum.clear
+               @foodadd_detail_foodnum.type 0
+               @foodadd_confirm.click
+               expect(@foodadd_confirm.displayed?).to be true
+            end
+            it 'foodadd_detail unit have four values'do
+               @foodadd_detail_spinner[0].click
+               expect(text_exact('个').displayed?).to be true
+               expect(text_exact('克').displayed?).to be true
+               expect(text_exact('千克').displayed?).to be true
+               expect(text_exact('毫升').displayed?).to be true
+            end
+            it 'foodadd_detail unit should unfold automatic'do
+               expect(exists{text('克')}).to be false
+            end
+            it 'foodadd_detail mode have two values for #560 series'do
+               2.times {@foodadd_detail_spinner[1].click} #app的bug，前一次没有修改，则需要点击2次
+               expect(text_exact('冷藏室').displayed?).to be true
+               expect(text_exact('冷冻室').displayed?).to be true
+            end
+            it 'foodadd_detail mode should unfold automatic'do
+               expect(exists{text('冷冻室')}).to be false
             end
          end
-
-         context 'food_list page'do
-            it 'check foodlist for each categary have been successful added'do
+         context 'foodadd page->voiceInput page' do
+            before :each do
+               enter_foodadd_voiceinput_page()
+            end
+            after :each do
+               back_from_foodadd_page_to_foodmanage_page()
+            end
+            it 'check the voiceInput page elements' do
+               expect(id('android:id/alertTitle').text).to include('语音添加提示')
+               expect(id('android:id/message').text).to include ('例如')
+               expect(button('确定').displayed?).to be true
+               expect(button('取消').displayed?).to be true
+               button('取消').click
+               expect(text('食品添加').displayed?).to be true
+            end
+            context 'voiceInput->speak page' do
+               before :each do
+                  button('确定').click
+               end
+               it 'check voiceInput->speak page elements' do
+                  expect(text('讯飞语音使用帮助').displayed?).to be true
+                  expect(text('安静环境').displayed?).to be true
+                  expect(text('科大讯飞').displayed?).to be true
+                  expect(button('知道了').displayed?).to be true
+                  expect(button('详细').displayed?).to be true
+                  button('知道了').click
+                  expect(text('请说出内容').displayed?).to be true
+                  expect(button('说完了').displayed?).to be true
+                  expect(button('取消').displayed?).to be true
+                  button('取消').click
+                  expect(text('食品添加').displayed?).to be true
+               end
+               it 'click button before speak any word' do
+                  button('说完了').click
+                  expect(button('重新说话').displayed?).to be true
+                  button('取消').click
+               end
+               it 'cancel re-speak'do
+                  button('说完了').click
+                  button('取消').click
+                  expect(text('食品添加').displayed?).to be true
+               end
+                it 'respeak does work'do
+                  button('说完了').click
+                  button('重新说话').click
+                  expect(button('说完了').displayed?).to be true
+                  button('取消').click
+                end
+            end
+         end
+         context 'food_list page' do
+             it 'check foodlist for each categary have been successful added'do
                expect(id('com.iceboxcontrol:id/foodmanage_categary_list').displayed?).to be true
                expect(text_exact('剩菜').displayed?).to be true
                expect(text_exact('鹅').displayed?).to be true
                expect(text_exact('植物黄油').displayed?).to be true
                expect(text_exact('章鱼').displayed?).to be true
                expect(text_exact('枣').displayed?).to be true
-            end
-            it 'foodlist can swipe'do
+             end
+             it 'foodlist can swipe'do
                2.times {swipe(start_x:200, start_y:1750, end_x:200, end_y:360, duration:3000)}
                expect(text_exact('板栗').displayed?).to be true
                expect(text_exact('紫花菜').displayed?).to be true
@@ -930,10 +936,10 @@ describe 'iceboxcontrol_STA_mode' do
                expect(text_exact('茶饮料').displayed?).to be true
                expect(text_exact('冰激凌').displayed?).to be true
                2.times {swipe(start_x:200, start_y:360, end_x:200, end_y:1750, duration:3000)}
-            end
+             end
          end
 
-         context 'food_edit page'do
+         context 'food_edit page' do
             before :each do
                text('鹅').click
                @foodedit_detail_back = id('com.iceboxcontrol:id/foodmanage_back')
@@ -941,24 +947,18 @@ describe 'iceboxcontrol_STA_mode' do
                @foodmanage_delete_button = id('com.iceboxcontrol:id/foodmanage_delete')
             end
             after :each do
+               back_from_foodedit_detail_page_to_foodmanage_page()
                sleep 2
             end
+
             it 'edit button and delete button should be displayed'do
-               begin
-                  expect(button('编辑').displayed?).to be true
-                  expect(@foodmanage_delete_button.displayed?).to be true
-               ensure
-                  @foodedit_detail_back.click
-               end
+               expect(button('编辑').displayed?).to be true
+               expect(@foodmanage_delete_button.displayed?).to be true
             end
             it 'foodmode is un-checkable before click edit button' do
-               begin
-                  @foodedit_detail_foodmode.click
-                  sleep 2
-                  expect(@foodedit_detail_foodmode.attribute('checked')).to eq('false')
-               ensure
-                  @foodedit_detail_back.click
-               end
+               @foodedit_detail_foodmode.click
+               sleep 2
+               expect(@foodedit_detail_foodmode.attribute('checked')).to eq('false')
             end
             it 'check elements after click edit button' do
                button('编辑').click
@@ -966,25 +966,29 @@ describe 'iceboxcontrol_STA_mode' do
                expect(ids('com.iceboxcontrol:id/food_spinner')[1].displayed?).to be true
                button('完成').click
             end
-            it 'changes take no effect if canceled' do
-               button('编辑').click
-               ids('com.iceboxcontrol:id/food_spinner')[0].click
-               text('毫升').click
-               button('完成').click
-               button('取消').click
-               expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('个')
-            end
             it 'change alert should not appear expect changes taken'do
                button('编辑').click
                button('完成').click
                expect(@foodmanage_title.displayed?).to be true
             end
-            it 'food number can be edit' do
+            it 'foodmode is checkable after click edit button' do
                button('编辑').click
-               id('com.iceboxcontrol:id/foodmanage_detail_foodnum_input').clear
-               id('com.iceboxcontrol:id/foodmanage_detail_foodnum_input').type rand(1..100)
+               @foodedit_detail_foodmode.click
+               sleep 2
                button('完成').click
                button('确定').click
+               expect(id('com.iceboxcontrol:id/foodmanage_item_mode').displayed?).to be true
+               text('鹅').click
+               expect(@foodedit_detail_foodmode.attribute('checked')).to eq('true')
+            end
+            it 'changes take no effect if canceled' do
+               button('编辑').click
+               # 2.times {ids('com.iceboxcontrol:id/food_spinner')[0].click} #此处为app的Bug，需要点击2次
+               ids('com.iceboxcontrol:id/food_spinner')[0].click
+               text('毫升').click
+               button('完成').click
+               button('取消').click
+               expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('个')
             end
             it 'food unit can be edit' do
                button('编辑').click
@@ -994,25 +998,19 @@ describe 'iceboxcontrol_STA_mode' do
                button('确定').click
                expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('千克')
             end
+            it 'food number can be edit' do
+               button('编辑').click
+               id('com.iceboxcontrol:id/foodmanage_detail_foodnum_input').clear
+               id('com.iceboxcontrol:id/foodmanage_detail_foodnum_input').type rand(1..100)
+               button('完成').click
+               button('确定').click
+            end
             it 'food mode can be edit' do
                button('编辑').click
                ids('com.iceboxcontrol:id/food_spinner')[1].click
                text('冷冻室').click
                button('完成').click
                button('确定').click
-            end
-            it 'foodmode is checkable after click edit button' do
-               button('编辑').click
-               ids('com.iceboxcontrol:id/food_spinner')[1].click
-               text('冷藏室').click
-               @foodedit_detail_foodmode.click
-               sleep 2
-               button('完成').click
-               button('确定').click
-               expect(id('com.iceboxcontrol:id/foodmanage_item_mode').displayed?).to be true
-               text('鹅').click
-               expect(@foodedit_detail_foodmode.attribute('checked')).to eq('true')
-               @foodedit_detail_back.click
             end
          end
       end

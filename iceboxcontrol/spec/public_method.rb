@@ -59,25 +59,38 @@ def enter_cookbook_page()
    sleep 3
 end
 
-def enter_foodadd_page()
-   @foodmanage_foodadd.click
-   sleep 3
-end
-
 
 #食品管理_page
 def enter_foodmanage_page()
    id('com.iceboxcontrol:id/handle').click
    text('食品管理').click
-   sleep 3
+   sleep 2
+end
+
+def enter_foodadd_page()
+   id('com.iceboxcontrol:id/foodmanage_foodadd').click
+   sleep 2
+end
+
+def enter_foodadd_detail_page()
+   enter_foodadd_page()
+   text('蔬菜').click
+   id('com.iceboxcontrol:id/foodadd_item_img').click
+   sleep 1
+end
+
+def enter_foodadd_voiceinput_page()
+   enter_foodadd_page()
+   id('com.iceboxcontrol:id/foodadd_voiceinput').click
+   sleep 1
 end
 
 def foodadd_search(foodname=nil)
-   @foodadd_search_input.clear
-   @foodadd_search_input.type foodname
+   id('com.iceboxcontrol:id/foodadd_searchfood').clear
+   id('com.iceboxcontrol:id/foodadd_searchfood').type foodname
    sleep 3
-   @foodadd_search_icon.click
-   sleep 3
+   id('com.iceboxcontrol:id/foodadd_search_icon').click
+   sleep 2
 end
 
 def swipe_food_to_visibel()
@@ -95,6 +108,32 @@ def add_food()
    button('确定').click
 end
 
+def back_from_foodadd_page_to_foodmanage_page()
+   if exists{text('食品添加')} == true and text('食品添加').displayed? == true
+      id('com.iceboxcontrol:id/foodadd_back').click
+      sleep 1
+   else exists{button('确定')} == true and button('确定').displayed? == true
+      button('取消').click
+      id('com.iceboxcontrol:id/foodadd_back').click
+      sleep 2
+   end
+end
+
+def back_from_foodadd_detail_page_to_foodmanage_page()
+   id('com.iceboxcontrol:id/foodadd_detail_back').click; sleep 1
+   back_from_foodadd_page_to_foodmanage_page()
+end
+
+def back_from_foodedit_detail_page_to_foodmanage_page()
+   if exists{text('食品管理')} == true and text('食品管理').displayed? == true
+   elsif exists{text('食品详情')} == true and text('食品详情').displayed? == true
+      id('com.iceboxcontrol:id/foodmanage_back').click
+   else exists{button('确定')} == true and button('确定').displayed? == true
+      button('取消').click
+      id('com.iceboxcontrol:id/foodmanage_back').click
+   end
+end
+
 
 #提醒_page
 def enter_reminder_page()
@@ -106,10 +145,6 @@ end
 
 #设置_page
 def enter_setting_page()
-   # @handle = find_element(:id, 'com.iceboxcontrol:id/handle')
-   # @handle.click
-   # @setting = find_element(:uiautomator, 'new UiSelector().text("设置")')
-   # @setting.click
    id('com.iceboxcontrol:id/handle').click
    text('设置').click
    sleep 3

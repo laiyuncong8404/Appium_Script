@@ -1,5 +1,3 @@
-./iceboxcontrol/backup/
-
 *.gem
 *.rbc
 /.config
