@@ -34,11 +34,6 @@ def enter_wkzx_page()
       expect(@handle.displayed?).to be true
       sleep 3
    elsif exists{button('否')}==true #提示没有绑定设备
-      # swipe(start_x: 550, start_y: 1120, end_x: 550, end_y: 800, duration: 1000)
-      # touch_action = Appium::TouchAction.new
-      # element = text('成都21')
-      # touch_action.press(element: element, x: 230, y: 1115).perform
-      # touch_action.release().perform
       button('否').click
       sleep 3
       @handle = find_element(:id, 'com.iceboxcontrol:id/handle')
