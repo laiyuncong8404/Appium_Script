@@ -8,8 +8,9 @@ These cases are wrote by Ruby with *appium_ruby_lib*.
 Run the test_cases with [Rspec](http://rspec.info/).
 
 **eg1:**
+
 	rspec -f d STA_mode_foodmanage_page_spec.rb
 
 **eg2:**
-	rspec -f h STA_mode_foodmanage_page_spec.rb > STA.html
 
+	rspec -f h STA_mode_foodmanage_page_spec.rb > STA.html
