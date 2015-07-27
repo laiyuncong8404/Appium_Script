@@ -12,7 +12,7 @@ require 'appium_lib'
 require 'net/http'
 require File.join(File.dirname(__FILE__), 'public_method')
 
-APP_PATH = 'E:\SSC_长虹软服中心\项目文档\智能冰箱技术研究与应用\低成本WiFi模块开发（QCA4004方案）\IceBoxControl_20150615.apk'
+APP_PATH = '../IceBoxControl_20150615.apk'
 
 def desired_caps
    {

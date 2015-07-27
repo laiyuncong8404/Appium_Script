@@ -17,7 +17,7 @@
   WinWait("[CLASS:#32770]","",10)
 
 ; Set the APK file path in the Edit field
-  ControlSetText("打开", "", "Edit1", "E:\SSC_长虹软服中心\项目文档\智能日电技术研究与应用\智能烟灶\SmartSmokeStove_v1.3.5_rh.apk")
+  ControlSetText("打开", "", "Edit1", "E:\SSC_长虹软服中心\项目文档\白电软件平台研发\08空调故障自动诊断系统\smartDiagnose-test-V0.12.apk")
   Sleep(2000)
 
 ; Click on the Open button

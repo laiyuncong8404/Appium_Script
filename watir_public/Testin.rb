@@ -8,7 +8,7 @@ require 'watir-webdriver'
 #网站用户名
 email = "laiyuncong8404@163.com"
 #网站密码
-pwd = "******" #请将*更换为实际密码
+pwd = "19840415" #请将*更换为实际密码
 #App登录用户名
 loginName = '13540774227'
 #App登录密码
@@ -39,7 +39,7 @@ sleep 5
 dr.element(:css, '#commit_package').click #上传App按钮
 sleep 5
 
-system ("E:\\Watir_WebDirver\\spec\\uploadApp.exe") #不支持直接设置，需要调用autoit
+system (File.join(File.dirname(__FILE__), 'uploadApp.exe')) #不支持直接设置，需要调用autoit
 dr.element(:css, "#app_progress_success").wait_until_present #等待app上传完成
 dr.element(:css,'#monkeyselect').checkbox(:name, 'monkeyflag').set
 sleep 5
