@@ -5,6 +5,25 @@ def back_click()
    press_keycode(4)
 end
 
+#login_AP
+def set_AP_mode_before_login()
+   if @mode_textview.text == '远程模式'
+      @mode_textview.click
+      modes = find_elements(:class_name, 'android.widget.CheckedTextView')
+      modes[0].click #点击‘本地模式’
+   elsif @mode_textview.text == '本地模式'
+   end
+end
+
+#login_STA
+def set_STA_mode_before_login()
+   if @mode_textview.text == '本地模式'
+      @mode_textview.click
+      modes = find_elements(:class_name, 'android.widget.CheckedTextView')
+      modes[1].click #点击‘远程模式’
+   elsif @mode_textview.text == '远程模式'
+   end
+end
 
 #login_page
 def login(username = nil,password = nil)
@@ -44,6 +63,25 @@ def enter_wkzx_page()
       expect(@handle.displayed?).to be true
       sleep 3
    end
+end
+
+def wkzx_uncheck_all_mode()
+   # checkboxes = [@wkzx_lcs_switch, @wkzx_bws_switch, @wkzx_smart_switch, @wkzx_holiday_switch, @wkzx_leco_switch, @wkzx_foodfirst_switch, @wkzx_quickcool_switch, @wkzx_quickcold_switch]
+   checkboxes = tags('android.widget.CheckBox')
+   for checkbox in checkboxes[0..1]
+      checkbox.click if checkbox.attribute('checked') == 'true'
+         exists{button('确定')}? button('确定').click : nil
+      sleep 3
+   end
+   for checkbox in checkboxes[2..-1]
+      checkbox.click if checkbox.attribute('checked') == 'true'
+      sleep 3
+   end
+end
+
+def wkzx_OnProgress?()
+   sleep 3
+   exists{tag('android.widget.ProgressBar')}? wkzx_OnProgress?() : (sleep 5)
 end
 
 
@@ -99,7 +137,9 @@ end
 def add_food()
    id('com.iceboxcontrol:id/foodadd_detail_foodnum').clear
    id('com.iceboxcontrol:id/foodadd_detail_foodnum').type rand(1..9999)
+   sleep 1
    id('com.iceboxcontrol:id/foodadd_confirm').click
+   sleep 1
    button('确定').click
 end
 
@@ -195,6 +235,13 @@ def enter_net_setting_page()
    sleep 3
 end
 
+# def set_wifi_connect(wifi_name=nil,wifi_pwd=nil)
+#    @wifi_setting_button.click
+#    text(wifi_name).click
+#    @wifi_pwd_input.clear
+#    @wifi_pwd_input.type wifi_pwd
+# end
+
 #device_connect page
 def enter_device_connect_page()
    @dev_connect_textview.click
@@ -240,4 +287,10 @@ end
 #enter_device_connect_select_page
 def enter_device_connect_select_page()
    @device_connect_connect_button.click
+end
+
+#enter_jd_dev_connect_page
+def enter_jd_dev_connect_page()
+   @jd_dev_connect.click
+   button('确定').click
 end

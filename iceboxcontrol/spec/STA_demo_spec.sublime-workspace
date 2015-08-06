@@ -1,0 +1,179 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"js",
+				"json_result"
+			],
+			[
+				"con",
+				"condition"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 272.0,
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Remove Package→删除程序包"
+			]
+		],
+		"width": 632.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Appium_Script/iceboxcontrol/spec/public_method.rb",
+		"/C/Appium_Script/watir_public/Kingkong_getReport.rb",
+		"/C/Appium_Script/iceboxcontrol/spec/STA_mode85_spec.rb",
+		"/C/Appium_Script/iceboxcontrol/spec/STA_demo1_spec.rb",
+		"/C/Appium_Script/iceboxcontrol/spec/STA_demo_spec.rb",
+		"/E/SSC_长虹软服中心/培训/appium简介_20150702/STA_demo_spec.rb",
+		"/E/SSC_长虹软服中心/培训/appium简介_20150702/appium简介_20150702.html",
+		"/C/Appium_Script/iceboxcontrol/spec/STA_mode.rb",
+		"/C/Users/Administrator/AppData/Roaming/npm/appium.cmd",
+		"/C/Users/Administrator/AppData/Roaming/npm/appium",
+		"/C/Users/Administrator/AppData/Roaming/npm/appium-doctor.cmd",
+		"/C/Users/Administrator/AppData/Roaming/npm/appium-doctor",
+		"/C/Users/Administrator/AppData/Roaming/npm/newman",
+		"/C/Users/Administrator/AppData/Roaming/npm/newman.cmd",
+		"/E/SSC_长虹软服中心/项目文档/白电软件平台研发/08空调故障自动诊断系统/Fault_code_fridge.py",
+		"/E/SSC_长虹软服中心/项目文档/白电软件平台研发/08空调故障自动诊断系统/Fault_code_ac.py",
+		"/E/Watir_WebDirver/exercise/test.py"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"project": "STA_demo_spec.sublime-project",
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

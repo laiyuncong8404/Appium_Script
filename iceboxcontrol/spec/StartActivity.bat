@@ -1,0 +1,1 @@
+adb -d shell am start -S -n com.iceboxcontrol/com.iceboxcontrol.activitys.LoginActivity
