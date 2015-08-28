@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>RSpec results</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <style type="text/css">
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    font-size: 80%;
+  }
+  </style>
+  <script type="text/javascript">
+    // <![CDATA[
+
+function addClass(element_id, classname) {
+  document.getElementById(element_id).className += (" " + classname);
+}
+
+function removeClass(element_id, classname) {
+  var elem = document.getElementById(element_id);
+  var classlist = elem.className.replace(classname,'');
+  elem.className = classlist;
+}
+
+function moveProgressBar(percentDone) {
+  document.getElementById("rspec-header").style.width = percentDone +"%";
+}
+
+function makeRed(element_id) {
+  removeClass(element_id, 'passed');
+  removeClass(element_id, 'not_implemented');
+  addClass(element_id,'failed');
+}
+
+function makeYellow(element_id) {
+  var elem = document.getElementById(element_id);
+  if (elem.className.indexOf("failed") == -1) {  // class doesn't includes failed
+    if (elem.className.indexOf("not_implemented") == -1) { // class doesn't include not_implemented
+      removeClass(element_id, 'passed');
+      addClass(element_id,'not_implemented');
+    }
+  }
+}
+
+function apply_filters() {
+  var passed_filter = document.getElementById('passed_checkbox').checked;
+  var failed_filter = document.getElementById('failed_checkbox').checked;
+  var pending_filter = document.getElementById('pending_checkbox').checked;
+
+  assign_display_style("example passed", passed_filter);
+  assign_display_style("example failed", failed_filter);
+  assign_display_style("example not_implemented", pending_filter);
+
+  assign_display_style_for_group("example_group passed", passed_filter);
+  assign_display_style_for_group("example_group not_implemented", pending_filter, pending_filter || passed_filter);
+  assign_display_style_for_group("example_group failed", failed_filter, failed_filter || pending_filter || passed_filter);
+}
+
+function get_display_style(display_flag) {
+  var style_mode = 'none';
+  if (display_flag == true) {
+    style_mode = 'block';
+  }
+  return style_mode;
+}
+
+function assign_display_style(classname, display_flag) {
+  var style_mode = get_display_style(display_flag);
+  var elems = document.getElementsByClassName(classname)
+  for (var i=0; i<elems.length;i++) {
+    elems[i].style.display = style_mode;
+  }
+}
+
+function assign_display_style_for_group(classname, display_flag, subgroup_flag) {
+  var display_style_mode = get_display_style(display_flag);
+  var subgroup_style_mode = get_display_style(subgroup_flag);
+  var elems = document.getElementsByClassName(classname)
+  for (var i=0; i<elems.length;i++) {
+    var style_mode = display_style_mode;
+    if ((display_flag != subgroup_flag) && (elems[i].getElementsByTagName('dt')[0].innerHTML.indexOf(", ") != -1)) {
+      elems[i].style.display = subgroup_style_mode;
+    } else {
+      elems[i].style.display = display_style_mode;
+    }
+  }
+}
+
+    // ]]>
+  </script>
+  <style type="text/css">
+#rspec-header {
+  background: #65C400; color: #fff; height: 4em;
+}
+
+.rspec-report h1 {
+  margin: 0px 10px 0px 10px;
+  padding: 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  font-size: 1.8em;
+  position: absolute;
+}
+
+#label {
+  float:left;
+}
+
+#display-filters {
+  float:left;
+  padding: 28px 0 0 40%;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+}
+
+#summary {
+  float:right;
+  padding: 5px 10px;
+  font-family: "Lucida Grande", Helvetica, sans-serif;
+  text-align: right;
+}
+
+#summary p {
+  margin: 0 0 0 2px;
+}
+
+#summary #totals {
+  font-size: 1.2em;
+}
+
+.example_group {
+  margin: 0 10px 5px;
+  background: #fff;
+}
+
+dl {
+  margin: 0; padding: 0 0 5px;
+  font: normal 11px "Lucida Grande", Helvetica, sans-serif;
+}
+
+dt {
+  padding: 3px;
+  background: #65C400;
+  color: #fff;
+  font-weight: bold;
+}
+
+dd {
+  margin: 5px 0 5px 5px;
+  padding: 3px 3px 3px 18px;
+}
+
+dd .duration {
+  padding-left: 5px;
+  text-align: right;
+  right: 0px;
+  float:right;
+}
+
+dd.example.passed {
+  border-left: 5px solid #65C400;
+  border-bottom: 1px solid #65C400;
+  background: #DBFFB4; color: #3D7700;
+}
+
+dd.example.not_implemented {
+  border-left: 5px solid #FAF834;
+  border-bottom: 1px solid #FAF834;
+  background: #FCFB98; color: #131313;
+}
+
+dd.example.pending_fixed {
+  border-left: 5px solid #0000C2;
+  border-bottom: 1px solid #0000C2;
+  color: #0000C2; background: #D3FBFF;
+}
+
+dd.example.failed {
+  border-left: 5px solid #C20000;
+  border-bottom: 1px solid #C20000;
+  color: #C20000; background: #FFFBD3;
+}
+
+
+dt.not_implemented {
+  color: #000000; background: #FAF834;
+}
+
+dt.pending_fixed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+dt.failed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+
+#rspec-header.not_implemented {
+  color: #000000; background: #FAF834;
+}
+
+#rspec-header.pending_fixed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+#rspec-header.failed {
+  color: #FFFFFF; background: #C40D0D;
+}
+
+
+.backtrace {
+  color: #000;
+  font-size: 12px;
+}
+
+a {
+  color: #BE5C00;
+}
+
+/* Ruby code, style similar to vibrant ink */
+.ruby {
+  font-size: 12px;
+  font-family: monospace;
+  color: white;
+  background-color: black;
+  padding: 0.1em 0 0.2em 0;
+}
+
+.ruby .keyword { color: #FF6600; }
+.ruby .constant { color: #339999; }
+.ruby .attribute { color: white; }
+.ruby .global { color: white; }
+.ruby .module { color: white; }
+.ruby .class { color: white; }
+.ruby .string { color: #66FF00; }
+.ruby .ident { color: white; }
+.ruby .method { color: #FFCC00; }
+.ruby .number { color: white; }
+.ruby .char { color: white; }
+.ruby .comment { color: #9933CC; }
+.ruby .symbol { color: white; }
+.ruby .regex { color: #44B4CC; }
+.ruby .punct { color: white; }
+.ruby .escape { color: white; }
+.ruby .interp { color: white; }
+.ruby .expr { color: white; }
+
+.ruby .offending { background-color: gray; }
+.ruby .linenum {
+  width: 75px;
+  padding: 0.1em 1em 0.2em 0;
+  color: #000000;
+  background-color: #FFFBD3;
+}
+
+  </style>
+</head>
+<body>
+<div class="rspec-report">
+
+<div id="rspec-header">
+  <div id="label">
+    <h1>RSpec Code Examples</h1>
+  </div>
+
+  <div id="display-filters">
+    <input id="passed_checkbox"  name="passed_checkbox"  type="checkbox" checked="checked" onchange="apply_filters()" value="1" /> <label for="passed_checkbox">Passed</label>
+    <input id="failed_checkbox"  name="failed_checkbox"  type="checkbox" checked="checked" onchange="apply_filters()" value="2" /> <label for="failed_checkbox">Failed</label>
+    <input id="pending_checkbox" name="pending_checkbox" type="checkbox" checked="checked" onchange="apply_filters()" value="3" /> <label for="pending_checkbox">Pending</label>
+  </div>
+
+  <div id="summary">
+    <p id="totals">&#160;</p>
+    <p id="duration">&#160;</p>
+  </div>
+</div>
+
+
+<div class="results">
+<div id="div_group_1" class="example_group passed">
+  <dl style="margin-left: 0px;">
+  <dt id="example_group_1" class="passed">iceboxcontrol_CHiQ1U_BM09_STA_mode</dt>
+  </dl>
+</div>
+<div id="div_group_2" class="example_group passed">
+  <dl style="margin-left: 15px;">
+  <dt id="example_group_2" class="passed">after user login as STA mode</dt>
+  </dl>
+</div>
+<div id="div_group_3" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_3" class="passed">login_page</dt>
+    <script type="text/javascript">moveProgressBar('0.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the login page elements</span><span class='duration'>3.32592s</span></dd>
+    <script type="text/javascript">moveProgressBar('1.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login as AP mode</span><span class='duration'>6.37681s</span></dd>
+    <script type="text/javascript">moveProgressBar('2.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">confirm the work mode is STA</span><span class='duration'>5.69772s</span></dd>
+    <script type="text/javascript">moveProgressBar('3.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login with empty username and empty password</span><span class='duration'>27.83954s</span></dd>
+    <script type="text/javascript">moveProgressBar('4.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login with empty username and no-empty password</span><span class='duration'>29.08019s</span></dd>
+    <script type="text/javascript">moveProgressBar('5.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login with no-empty username and empty password</span><span class='duration'>29.17770s</span></dd>
+    <script type="text/javascript">moveProgressBar('6.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login with wrong username and wrong password</span><span class='duration'>29.75528s</span></dd>
+    <script type="text/javascript">moveProgressBar('7.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login with right username and wrong password</span><span class='duration'>31.04844s</span></dd>
+    <script type="text/javascript">moveProgressBar('8.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not login with wrong username and right password</span><span class='duration'>30.62789s</span></dd>
+    <script type="text/javascript">moveProgressBar('9.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">can be login with right username and right password</span><span class='duration'>40.87269s</span></dd>
+    <script type="text/javascript">moveProgressBar('10.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">auto-login worked</span><span class='duration'>49.54679s</span></dd>
+  </dl>
+</div>
+<div id="div_group_4" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_4" class="passed">setting_page</dt>
+    <script type="text/javascript">moveProgressBar('11.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the setting page elements</span><span class='duration'>0.49206s</span></dd>
+  </dl>
+</div>
+<div id="div_group_5" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_5" class="passed">userinfo page</dt>
+    <script type="text/javascript">moveProgressBar('12.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">check user nickname</span><span class='duration'>3.66147s</span></dd>
+    <script type="text/javascript">moveProgressBar('13.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">change user nickname without confirm</span><span class='duration'>27.58700s</span></dd>
+    <script type="text/javascript">moveProgressBar('14.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">change user nickname with 21 characters(limit:20)</span><span class='duration'>41.80931s</span></dd>
+    <script type="text/javascript">moveProgressBar('15.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">change user nickname with confirm</span><span class='duration'>43.89557s</span></dd>
+  </dl>
+</div>
+<div id="div_group_6" class="example_group passed">
+  <dl style="margin-left: 60px;">
+  <dt id="example_group_6" class="passed">change userinfo_password page</dt>
+    <script type="text/javascript">moveProgressBar('16.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the password modify page elements</span><span class='duration'>19.41346s</span></dd>
+    <script type="text/javascript">moveProgressBar('16.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">click cancel_button before type any text</span><span class='duration'>18.81889s</span></dd>
+    <script type="text/javascript">moveProgressBar('17.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">click confirm_button before type any text</span><span class='duration'>21.94279s</span></dd>
+    <script type="text/javascript">moveProgressBar('18.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">change userinfo_password with wrong password</span><span class='duration'>35.35299s</span></dd>
+    <script type="text/javascript">moveProgressBar('19.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">change userinfo_password with new password short</span><span class='duration'>42.68692s</span></dd>
+    <script type="text/javascript">moveProgressBar('20.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">change userinfo_password with new password &amp; repeat password not match</span><span class='duration'>43.19199s</span></dd>
+    <script type="text/javascript">moveProgressBar('21.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">confirm change userinfo_password</span><span class='duration'>35.08295s</span></dd>
+  </dl>
+</div>
+<div id="div_group_7" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_7" class="passed">fridgePwd page</dt>
+    <script type="text/javascript">moveProgressBar('22.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the fridgePwd page elements</span><span class='duration'>7.32643s</span></dd>
+    <script type="text/javascript">moveProgressBar('23.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">click confirm_button before type any text</span><span class='duration'>13.35670s</span></dd>
+    <script type="text/javascript">moveProgressBar('24.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">change fridgePwd with new password &amp; repeat password not match</span><span class='duration'>33.11771s</span></dd>
+    <script type="text/javascript">moveProgressBar('25.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">confirm change fridgePwd</span><span class='duration'>36.23810s</span></dd>
+  </dl>
+</div>
+<div id="div_group_8" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_8" class="passed">network_setting page</dt>
+    <script type="text/javascript">moveProgressBar('26.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">can not enter net_setting page</span><span class='duration'>6.24629s</span></dd>
+  </dl>
+</div>
+<div id="div_group_9" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_9" class="passed">device_connect page</dt>
+    <script type="text/javascript">moveProgressBar('27.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the device_connect page elements</span><span class='duration'>7.16341s</span></dd>
+    <script type="text/javascript">moveProgressBar('28.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">delete all devices before add</span><span class='duration'>10.42732s</span></dd>
+  </dl>
+</div>
+<div id="div_group_10" class="example_group passed">
+  <dl style="margin-left: 60px;">
+  <dt id="example_group_10" class="passed">device_connect_add page</dt>
+    <script type="text/javascript">moveProgressBar('29.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the device_connect page elements</span><span class='duration'>17.33320s</span></dd>
+    <script type="text/javascript">moveProgressBar('30.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">click confirm_button before type any text</span><span class='duration'>42.00183s</span></dd>
+    <script type="text/javascript">moveProgressBar('31.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add with no name</span><span class='duration'>40.67116s</span></dd>
+    <script type="text/javascript">moveProgressBar('32.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add with no sn</span><span class='duration'>41.12722s</span></dd>
+    <script type="text/javascript">moveProgressBar('33.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add with no password</span><span class='duration'>41.31625s</span></dd>
+    <script type="text/javascript">moveProgressBar('33.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add with wrong sn</span><span class='duration'>41.66779s</span></dd>
+    <script type="text/javascript">moveProgressBar('34.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add with wrong password</span><span class='duration'>39.79855s</span></dd>
+    <script type="text/javascript">moveProgressBar('35.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add success</span><span class='duration'>36.88468s</span></dd>
+    <script type="text/javascript">moveProgressBar('36.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">device_connect_add fail by twice</span><span class='duration'>40.12709s</span></dd>
+  </dl>
+</div>
+<div id="div_group_11" class="example_group passed">
+  <dl style="margin-left: 60px;">
+  <dt id="example_group_11" class="passed">device_connect_select page</dt>
+    <script type="text/javascript">moveProgressBar('37.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the device_connect_select page elements</span><span class='duration'>13.52022s</span></dd>
+    <script type="text/javascript">moveProgressBar('38.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">click  cancel button before select any device</span><span class='duration'>14.10029s</span></dd>
+    <script type="text/javascript">moveProgressBar('39.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">click  confirm button before select any device</span><span class='duration'>17.11917s</span></dd>
+    <script type="text/javascript">moveProgressBar('40.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">click cancel button after select an device</span><span class='duration'>14.62186s</span></dd>
+    <script type="text/javascript">moveProgressBar('41.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">connect an device</span><span class='duration'>12.54809s</span></dd>
+  </dl>
+</div>
+<div id="div_group_12" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_12" class="passed">unlogin page</dt>
+    <script type="text/javascript">moveProgressBar('42.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">check unlogin page elements</span><span class='duration'>5.47370s</span></dd>
+    <script type="text/javascript">moveProgressBar('43.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">click cancel button maintain login status</span><span class='duration'>4.60058s</span></dd>
+    <script type="text/javascript">moveProgressBar('44.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">click confirm button to logout</span><span class='duration'>10.05078s</span></dd>
+  </dl>
+</div>
+<div id="div_group_13" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_13" class="passed">WenKongZhongXin_page</dt>
+    <script type="text/javascript">moveProgressBar('45.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the wkzx page elements</span><span class='duration'>2.59283s</span></dd>
+  </dl>
+</div>
+<div id="div_group_14" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_14" class="passed">lcs_OFF_mode check</dt>
+    <script type="text/javascript">moveProgressBar('46.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">lcs_OFF_mode should OFF when smart_mode ON</span><span class='duration'>55.12150s</span></dd>
+    <script type="text/javascript">moveProgressBar('47.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">lcs_OFF_mode should OFF when holiday_mode ON</span><span class='duration'>53.06724s</span></dd>
+    <script type="text/javascript">moveProgressBar('48.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">lcs_OFF_mode should OFF when quickcool_mode ON</span><span class='duration'>52.03811s</span></dd>
+  </dl>
+</div>
+<div id="div_group_15" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_15" class="passed">bws_OFF_mode check</dt>
+    <script type="text/javascript">moveProgressBar('49.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">bws_OFF_mode should OFF when smart_mode ON</span><span class='duration'>49.75682s</span></dd>
+  </dl>
+</div>
+<div id="div_group_16" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_16" class="passed">smart_mode check</dt>
+    <script type="text/javascript">moveProgressBar('50.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">smart_mode should OFF when lcs_mode OFF</span><span class='duration'>52.56267s</span></dd>
+    <script type="text/javascript">moveProgressBar('50.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">smart_mode should OFF when bws_mode OFF</span><span class='duration'>52.38965s</span></dd>
+    <script type="text/javascript">moveProgressBar('51.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">smart_mode should OFF when quickcold_mode ON</span><span class='duration'>49.04173s</span></dd>
+    <script type="text/javascript">moveProgressBar('52.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">smart_mode should OFF when holiday_mode OFF</span><span class='duration'>52.31914s</span></dd>
+    <script type="text/javascript">moveProgressBar('53.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">smart_mode should OFF when quickcool_mode ON</span><span class='duration'>52.81771s</span></dd>
+  </dl>
+</div>
+<div id="div_group_17" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_17" class="passed">holiday_mode_check</dt>
+    <script type="text/javascript">moveProgressBar('54.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">holiday_mode should OFF when lcs_mode OFF</span><span class='duration'>56.64569s</span></dd>
+    <script type="text/javascript">moveProgressBar('55.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">holiday_mode can be ON when bws_mode OFF</span><span class='duration'>57.05725s</span></dd>
+    <script type="text/javascript">moveProgressBar('56.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">holiday_mode can be ON when quickcold_mode ON</span><span class='duration'>57.07975s</span></dd>
+    <script type="text/javascript">moveProgressBar('57.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">holiday_mode should OFF when smart_mode ON</span><span class='duration'>49.17624s</span></dd>
+    <script type="text/javascript">moveProgressBar('58.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">holiday_mode should OFF when quickcool_mode ON</span><span class='duration'>52.33615s</span></dd>
+  </dl>
+</div>
+<div id="div_group_18" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_18" class="passed">quickcool_mode check</dt>
+    <script type="text/javascript">moveProgressBar('59.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">quickcool_mode should OFF when lcs_mode OFF</span><span class='duration'>52.62668s</span></dd>
+    <script type="text/javascript">moveProgressBar('60.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">quickcool_mode can be ON when bws_mode OFF</span><span class='duration'>57.99036s</span></dd>
+    <script type="text/javascript">moveProgressBar('61.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">quickcool_mode can be ON when quickcold_mode ON</span><span class='duration'>56.97673s</span></dd>
+    <script type="text/javascript">moveProgressBar('62.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">quickcool_mode should OFF when smart_mode ON</span><span class='duration'>48.71969s</span></dd>
+    <script type="text/javascript">moveProgressBar('63.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">quickcool_mode should OFF when holiday_mode ON</span><span class='duration'>52.28114s</span></dd>
+  </dl>
+</div>
+<div id="div_group_19" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_19" class="passed">quickcold_mode check</dt>
+    <script type="text/javascript">makeRed('rspec-header');</script>
+    <script type="text/javascript">makeRed('div_group_19');</script>
+    <script type="text/javascript">makeRed('example_group_19');</script>
+    <script type="text/javascript">moveProgressBar('64.1');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">quickcold_mode should OFF when smart_mode ON</span>
+      <span class="duration">55.71907s</span>
+      <div class="failure" id="failure_1">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:906:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">904</span>                                        <span class="instance-variable">@wkzx_quickcold_switch</span>.click
+<span class="linenum">905</span>                                        wkzx_OnProgress?()
+<span class="offending"><span class="linenum">906</span>                                        expect(id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/wkzx_lds_temperature</span><span class="delimiter">'</span></span>).text).to eq(<span class="string"><span class="delimiter">'</span><span class="content">-32.0℃</span><span class="delimiter">'</span></span>)</span>
+<span class="linenum">907</span>                                        <span class="instance-variable">@wkzx_smart_switch</span>.click
+<span class="linenum">908</span>                                        wkzx_OnProgress?()</code></pre>
+      </div>
+    </dd>
+  </dl>
+</div>
+<div id="div_group_20" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_20" class="passed">foodmanage_page</dt>
+    <script type="text/javascript">moveProgressBar('65.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">check foodmanage_page elements</span><span class='duration'>1.00813s</span></dd>
+    <script type="text/javascript">moveProgressBar('66.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">delete all foods before add</span><span class='duration'>133.20041s</span></dd>
+  </dl>
+</div>
+<div id="div_group_21" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_21" class="passed">food_add page</dt>
+    <script type="text/javascript">moveProgressBar('66.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">check food add page elements</span><span class='duration'>3.69097s</span></dd>
+    <script type="text/javascript">moveProgressBar('67.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">check each food add categary</span><span class='duration'>10.59735s</span></dd>
+    <script type="text/javascript">moveProgressBar('68.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">food add categary can swipe</span><span class='duration'>14.26281s</span></dd>
+    <script type="text/javascript">moveProgressBar('69.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_left and foodadd_right are work</span><span class='duration'>21.52023s</span></dd>
+    <script type="text/javascript">moveProgressBar('70.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">add each categary's first and last food</span><span class='duration'>385.49445s</span></dd>
+  </dl>
+</div>
+<div id="div_group_22" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_22" class="passed">foodadd search_page</dt>
+    <script type="text/javascript">moveProgressBar('71.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">search do not work with full blank</span><span class='duration'>24.11906s</span></dd>
+    <script type="text/javascript">moveProgressBar('72.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">search do not work with &quot;*&quot;</span><span class='duration'>22.78889s</span></dd>
+    <script type="text/javascript">moveProgressBar('73.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">search do not work with blank before food name</span><span class='duration'>20.84715s</span></dd>
+    <script type="text/javascript">moveProgressBar('74.5');</script>
+    <dd class="example passed"><span class="passed_spec_name">search do not work with blank between food name</span><span class='duration'>20.36009s</span></dd>
+    <script type="text/javascript">moveProgressBar('75.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">search do not work with blank after food name</span><span class='duration'>21.63975s</span></dd>
+    <script type="text/javascript">moveProgressBar('76.4');</script>
+    <dd class="example passed"><span class="passed_spec_name">search food in menu</span><span class='duration'>23.63700s</span></dd>
+    <script type="text/javascript">moveProgressBar('77.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">search food not in menu</span><span class='duration'>22.22582s</span></dd>
+  </dl>
+</div>
+<div id="div_group_23" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_23" class="passed">foodadd detail_page</dt>
+    <script type="text/javascript">moveProgressBar('78.3');</script>
+    <dd class="example passed"><span class="passed_spec_name">check foodadd_detail page elements</span><span class='duration'>9.92876s</span></dd>
+    <script type="text/javascript">moveProgressBar('79.2');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_detail confirm add before set number</span><span class='duration'>15.47246s</span></dd>
+    <script type="text/javascript">moveProgressBar('80.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_detail number is set to zero</span><span class='duration'>23.75552s</span></dd>
+    <script type="text/javascript">moveProgressBar('81.1');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_detail unit have four values</span><span class='duration'>13.93977s</span></dd>
+    <script type="text/javascript">moveProgressBar('82.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_detail unit should unfold automatic</span><span class='duration'>10.51684s</span></dd>
+    <script type="text/javascript">moveProgressBar('83.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_detail mode have two values for #560 series</span><span class='duration'>14.81238s</span></dd>
+    <script type="text/javascript">moveProgressBar('83.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">foodadd_detail mode should unfold automatic</span><span class='duration'>9.81375s</span></dd>
+  </dl>
+</div>
+<div id="div_group_24" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_24" class="passed">foodadd page-&gt;voiceInput page</dt>
+    <script type="text/javascript">moveProgressBar('84.9');</script>
+    <dd class="example passed"><span class="passed_spec_name">check the voiceInput page elements</span><span class='duration'>9.70973s</span></dd>
+  </dl>
+</div>
+<div id="div_group_25" class="example_group passed">
+  <dl style="margin-left: 60px;">
+  <dt id="example_group_25" class="passed">voiceInput-&gt;speak page</dt>
+    <script type="text/javascript">moveProgressBar('85.8');</script>
+    <dd class="example passed"><span class="passed_spec_name">check voiceInput-&gt;speak page elements</span><span class='duration'>12.60510s</span></dd>
+    <script type="text/javascript">moveProgressBar('86.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">click button before speak any word</span><span class='duration'>12.22055s</span></dd>
+    <script type="text/javascript">moveProgressBar('87.7');</script>
+    <dd class="example passed"><span class="passed_spec_name">cancel re-speak</span><span class='duration'>11.94752s</span></dd>
+    <script type="text/javascript">moveProgressBar('88.6');</script>
+    <dd class="example passed"><span class="passed_spec_name">respeak does work</span><span class='duration'>13.25118s</span></dd>
+  </dl>
+</div>
+<div id="div_group_26" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_26" class="passed">food_list page</dt>
+    <script type="text/javascript">makeRed('div_group_26');</script>
+    <script type="text/javascript">makeRed('example_group_26');</script>
+    <script type="text/javascript">moveProgressBar('89.6');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">check foodlist for each categary have been successful added</span>
+      <span class="duration">10.72786s</span>
+      <div class="failure" id="failure_2">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1185:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1183</span>                                        expect(id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_categary_list</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span>
+<span class="linenum">1184</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">剩菜</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span>
+<span class="offending"><span class="linenum">1185</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span></span>
+<span class="linenum">1186</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">植物黄油</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span>
+<span class="linenum">1187</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">章鱼</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span></code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('90.5');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">foodlist can swipe</span>
+      <span class="duration">15.10692s</span>
+      <div class="failure" id="failure_3">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1196:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1194</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">鹌鹑蛋</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span>
+<span class="linenum">1195</span>                                        expect(text(<span class="string"><span class="delimiter">'</span><span class="content">真空包装</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span> <span class="comment">#字符显示不全，长度限制：5</span>
+<span class="offending"><span class="linenum">1196</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">茶饮料</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span></span>
+<span class="linenum">1197</span>                                        expect(text_exact(<span class="string"><span class="delimiter">'</span><span class="content">冰激凌</span><span class="delimiter">'</span></span>).displayed?).to be <span class="predefined-constant">true</span>
+<span class="linenum">1198</span>                                        <span class="integer">2</span>.times {swipe(<span class="key">start_x</span>:<span class="integer">200</span>, <span class="key">start_y</span>:<span class="integer">360</span>, <span class="key">end_x</span>:<span class="integer">200</span>, <span class="key">end_y</span>:<span class="integer">1750</span>, <span class="key">duration</span>:<span class="integer">3000</span>)}</code></pre>
+      </div>
+    </dd>
+  </dl>
+</div>
+<div id="div_group_27" class="example_group passed">
+  <dl style="margin-left: 45px;">
+  <dt id="example_group_27" class="passed">food_edit page</dt>
+    <script type="text/javascript">makeRed('div_group_27');</script>
+    <script type="text/javascript">makeRed('example_group_27');</script>
+    <script type="text/javascript">moveProgressBar('91.5');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">edit button and delete button should be displayed</span>
+      <span class="duration">12.76512s</span>
+      <div class="failure" id="failure_4">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('92.4');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">foodmode is un-checkable before click edit button</span>
+      <span class="duration">12.64061s</span>
+      <div class="failure" id="failure_5">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('93.3');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">check elements after click edit button</span>
+      <span class="duration">12.50759s</span>
+      <div class="failure" id="failure_6">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('94.3');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">change alert should not appear expect changes taken</span>
+      <span class="duration">12.59160s</span>
+      <div class="failure" id="failure_7">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('95.2');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">foodmode is checkable after click edit button</span>
+      <span class="duration">12.50309s</span>
+      <div class="failure" id="failure_8">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('96.2');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">changes take no effect if canceled</span>
+      <span class="duration">12.74412s</span>
+      <div class="failure" id="failure_9">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('97.1');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">food unit can be edit</span>
+      <span class="duration">12.47758s</span>
+      <div class="failure" id="failure_10">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('98.1');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">food number can be edit</span>
+      <span class="duration">13.03265s</span>
+      <div class="failure" id="failure_11">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+    <script type="text/javascript">moveProgressBar('99.0');</script>
+    <dd class="example failed">
+      <span class="failed_spec_name">food mode can be edit</span>
+      <span class="duration">13.10867s</span>
+      <div class="failure" id="failure_12">
+        <div class="message"><pre>No element found</pre></div>
+        <div class="backtrace"><pre>./CHiQ1U_BM09_STA_spec.rb:1204:in `block (5 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">1202</span>                        context <span class="string"><span class="delimiter">'</span><span class="content">food_edit page</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+<span class="linenum">1203</span>                                before <span class="symbol">:each</span> <span class="keyword">do</span>
+<span class="offending"><span class="linenum">1204</span>                                        text(<span class="string"><span class="delimiter">'</span><span class="content">鹅</span><span class="delimiter">'</span></span>).click</span>
+<span class="linenum">1205</span>                                        <span class="instance-variable">@foodedit_detail_back</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_back</span><span class="delimiter">'</span></span>)
+<span class="linenum">1206</span>                                        <span class="instance-variable">@foodedit_detail_foodmode</span> = id(<span class="string"><span class="delimiter">'</span><span class="content">com.iceboxcontrol:id/foodmanage_detail_foodmode</span><span class="delimiter">'</span></span>)</code></pre>
+      </div>
+    </dd>
+  </dl>
+</div>
+<div id="div_group_28" class="example_group passed">
+  <dl style="margin-left: 30px;">
+  <dt id="example_group_28" class="passed">cookbook_page</dt>
+    <script type="text/javascript">moveProgressBar('100.0');</script>
+    <dd class="example passed"><span class="passed_spec_name">check cookbook_page elements</span><span class='duration'>0.51657s</span></dd>
+  </dl>
+</div>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>3395.87122 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "106 examples, 12 failures";</script>
+</div>
+</div>
+</body>
+</html>

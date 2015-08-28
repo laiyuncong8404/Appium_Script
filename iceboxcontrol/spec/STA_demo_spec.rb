@@ -11,7 +11,7 @@ require 'rspec'
 require 'appium_lib'
 require File.join(File.dirname(__FILE__), 'public_method')
 
-APP_PATH = '../IceBoxControl_20150629.apk'
+APP_PATH = '../IceBoxControl_CHiQ1U_20150824.apk'
 
 def desired_caps
    {

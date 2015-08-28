@@ -9,9 +9,9 @@ require 'rubygems'
 require 'rspec'
 require 'appium_lib'
 require 'net/http'
-require File.join(File.dirname(__FILE__), 'public_method')
+require File.join(File.dirname(__FILE__),'..', 'public_method')
 
-APP_PATH = '../IceBoxControl_20150724_debug.apk'
+APP_PATH = '../../IceBoxControl_20150724_debug.apk'
 
 def desired_caps
 	{

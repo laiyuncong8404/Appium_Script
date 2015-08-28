@@ -20,9 +20,8 @@ sleep 3
 
 system ("#{uploadApp_path}") #不支持直接设置，需要调用autoit
 dr.text_field(:css, '#txtEmail').wait_until_present #等待app上传完成
-# dr.screenshot.save("#{md5_png_path}")
 md5 =  dr.element(:css, "#apk_modal > div.modal-body > div > div:nth-child(2)").text
-md5 = md5[(md5.length-37)..-6] #去掉多余字符
+md5 = md5[(md5.length-39)..-8] #去掉多余字符
 puts md5
 #把MD5值存储到本地文件中
 puts "Opening the file..."

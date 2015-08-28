@@ -12,7 +12,7 @@ require 'appium_lib'
 require 'net/http'
 require File.join(File.dirname(__FILE__),'..', 'public_method')
 
-APP_PATH = '../../IceBoxControl_CHiQ1U_debug.apk'
+APP_PATH = '../../IceBoxControl_CHiQ1U_20150824_debug.apk'
 
 def desired_caps
 	{
@@ -39,7 +39,7 @@ def desired_caps
 	}
 end
 
-describe 'iceboxcontrol_STA_mode' do
+describe 'iceboxcontrol_CHiQ1U_BM30_STA_mode' do
 	before(:all) do
 		@driver = Appium::Driver.new(desired_caps).start_driver
 		Appium.promote_appium_methods RSpec::Core::ExampleGroup
@@ -50,7 +50,7 @@ describe 'iceboxcontrol_STA_mode' do
 		@new_nickname = "Lucy"
 		@wrong_fridgePwd = @short_fridgeNewPwd = "12345"
 		@new_fridgeNewPwd = "4008111666"
-		@device_name = '成都21'
+		@device_name = 'CHiQ_BM30'
 		# @device_sn = "FRTEST400911700407014921" #QCA4004_WiFI
 		@device_sn = "FRTEST400911700407014000" #CHiQ_1U_BM30
 	end
@@ -1008,7 +1008,7 @@ describe 'iceboxcontrol_STA_mode' do
 						id('com.iceboxcontrol:id/foodadd_item_img').click
 						add_food()
 						text(categary1_name).click
-						4.times {swipe_food_to_visibel()}
+						5.times {swipe_food_to_visibel()}
 						last_ele('android.widget.TextView').click
 						add_food()
 					end
@@ -1116,7 +1116,7 @@ describe 'iceboxcontrol_STA_mode' do
 					expect(exists{text('克')}).to be false
 				end
 				it 'foodadd_detail mode have two values for #560 series'do
-					2.times {@foodadd_detail_spinner[1].click} #app的bug，前一次没有修改，则需要点击2次
+					@foodadd_detail_spinner[1].click #app的bug，前一次没有修改，则需要点击2次
 					expect(text_exact('冷藏室').displayed?).to be true
 					expect(text_exact('冷冻室').displayed?).to be true
 				end
@@ -1181,10 +1181,8 @@ describe 'iceboxcontrol_STA_mode' do
 				it 'check foodlist for each categary have been successful added'do
 					expect(id('com.iceboxcontrol:id/foodmanage_categary_list').displayed?).to be true
 					expect(text_exact('剩菜').displayed?).to be true
-					expect(text_exact('鹅').displayed?).to be true
 					expect(text_exact('植物黄油').displayed?).to be true
 					expect(text_exact('章鱼').displayed?).to be true
-					expect(text_exact('枣').displayed?).to be true
 				end
 				it 'foodlist can swipe'do
 					2.times {swipe(start_x:200, start_y:1750, end_x:200, end_y:360, duration:3000)}
@@ -1192,7 +1190,6 @@ describe 'iceboxcontrol_STA_mode' do
 					expect(text_exact('紫花菜').displayed?).to be true
 					expect(text_exact('鹌鹑蛋').displayed?).to be true
 					expect(text('真空包装').displayed?).to be true #字符显示不全，长度限制：5
-					expect(text_exact('茶饮料').displayed?).to be true
 					expect(text_exact('冰激凌').displayed?).to be true
 					2.times {swipe(start_x:200, start_y:360, end_x:200, end_y:1750, duration:3000)}
 				end
@@ -1200,7 +1197,7 @@ describe 'iceboxcontrol_STA_mode' do
 
 			context 'food_edit page' do
 				before :each do
-					text('鹅').click
+					text('章鱼').click
 					@foodedit_detail_back = id('com.iceboxcontrol:id/foodmanage_back')
 					@foodedit_detail_foodmode = id('com.iceboxcontrol:id/foodmanage_detail_foodmode')
 					@foodmanage_delete_button = id('com.iceboxcontrol:id/foodmanage_delete')
@@ -1237,17 +1234,16 @@ describe 'iceboxcontrol_STA_mode' do
 					button('完成').click
 					button('确定').click
 					expect(id('com.iceboxcontrol:id/foodmanage_item_mode').displayed?).to be true
-					text('鹅').click
+					text('章鱼').click
 					expect(@foodedit_detail_foodmode.attribute('checked')).to eq('true')
 				end
 				it 'changes take no effect if canceled' do
 					button('编辑').click
-					# 2.times {ids('com.iceboxcontrol:id/food_spinner')[0].click} #此处为app的Bug，需要点击2次
 					ids('com.iceboxcontrol:id/food_spinner')[0].click
 					text('毫升').click
 					button('完成').click
 					button('取消').click
-					expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('个')
+					expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[4].text).to eq('个')
 				end
 				it 'food unit can be edit' do
 					button('编辑').click
@@ -1255,7 +1251,7 @@ describe 'iceboxcontrol_STA_mode' do
 					text('千克').click
 					button('完成').click
 					button('确定').click
-					expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[2].text).to eq('千克')
+					expect(ids('com.iceboxcontrol:id/foodmanage_item_Unit')[4].text).to eq('千克')
 				end
 				it 'food number can be edit' do
 					button('编辑').click
@@ -1270,7 +1266,7 @@ describe 'iceboxcontrol_STA_mode' do
 					text('冷冻室').click
 					button('完成').click
 					button('确定').click
-					text('鹅').click
+					text('章鱼').click
 					expect(text('冷冻室').displayed?).to be true
 				end
 			end

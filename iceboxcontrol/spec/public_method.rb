@@ -37,6 +37,16 @@ def login(username = nil,password = nil)
    sleep 2
 end
 
+def login_with_password_remember(username = nil,password = nil)
+   @username_textfiled.clear
+   @username_textfiled.type username
+   @password_textfiled.clear
+   @password_textfiled.type password
+   # @autoLogin_button.click
+   @rememberPassword_button.click
+   # @login_button.click
+   sleep 2
+end
 
 #温控中心_page
 def enter_wkzx_page()
@@ -80,7 +90,7 @@ def wkzx_uncheck_all_mode()
 end
 
 def wkzx_OnProgress?()
-   sleep 3
+   sleep 5
    exists{tag('android.widget.ProgressBar')}? wkzx_OnProgress?() : (sleep 5)
 end
 

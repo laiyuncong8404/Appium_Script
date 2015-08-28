@@ -50,9 +50,11 @@ describe 'iceboxcontrol_STA_mode' do
 		@new_fridgeNewPwd = "4008111666"
 		@device_name = "美菱京东_218"
 		@device_sn = "JDFRTEST4009117004070140" #JingDong
-		@wifi_name = "TP-SecurityTeam"
+		# @wifi_name = "TP-SecurityTeam"
+		@wifi_name = "TEST-out"
 		@wifi_wrong_pwd = "201512345"
-		@wifi_right_pwd = "20150116"
+		# @wifi_right_pwd = "20150116"
+		@wifi_right_pwd = "test-out"
 	end
 	after(:all) do
 		@driver_quit
