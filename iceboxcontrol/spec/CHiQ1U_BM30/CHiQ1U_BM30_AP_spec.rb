@@ -226,11 +226,10 @@ describe 'iceboxcontrol_CHiQ1U_BM30_AP_mode' do
 				@wkzx_title = id('com.iceboxcontrol:id/wkzx_title')
 				@wkzx_lcs_switch = id('com.iceboxcontrol:id/wkzx_lcs_switch')
 				@wkzx_bws_switch = id('com.iceboxcontrol:id/wkzx_bws_switch')
-				# @wkzx_lds_seekbar = id('com.iceboxcontrol:id/wkzx_lds_seekbar')
 				@wkzx_smart_switch = id('com.iceboxcontrol:id/wkzx_smart_switch')
 				@wkzx_holiday_switch = id('com.iceboxcontrol:id/wkzx_holiday_switch')
 				@wkzx_leco_switch = id('com.iceboxcontrol:id/wkzx_leco_switch')
-				@wkzx_foodfirst_switch = id('com.iceboxcontrol:id/wkzx_foodfirst_switch')
+				# @wkzx_foodfirst_switch = id('com.iceboxcontrol:id/wkzx_foodfirst_switch')
 				@wkzx_quickcool_switch = id('com.iceboxcontrol:id/wkzx_quickcool_switch')
 				@wkzx_quickcold_switch = id('com.iceboxcontrol:id/wkzx_quickcold_switch')
 			end
@@ -242,11 +241,10 @@ describe 'iceboxcontrol_CHiQ1U_BM30_AP_mode' do
 				expect(@wkzx_title.displayed?).to be true
 				expect(@wkzx_lcs_switch.displayed?).to be true
 				expect(@wkzx_bws_switch.displayed?).to be true
-				# expect(@wkzx_lds_seekbar.displayed?).to be true
 				expect(@wkzx_smart_switch.displayed?).to be true
 				expect(@wkzx_holiday_switch.displayed?).to be true
 				expect(@wkzx_leco_switch.displayed?).to be true
-				expect(@wkzx_foodfirst_switch.displayed?).to be true
+				# expect(@wkzx_foodfirst_switch.displayed?).to be true
 				expect(@wkzx_quickcool_switch.displayed?).to be true
 				expect(@wkzx_quickcold_switch.displayed?).to be true
 			end

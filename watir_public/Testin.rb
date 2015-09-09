@@ -36,6 +36,8 @@ dr.link(:id, 'next_step').click
 sleep 5
 dr.link(:id, 'button_continue').click
 sleep 5
+dr.select_list(:id, 'sel_detail_type').select('其他应用')
+sleep 2
 dr.element(:css, '#commit_package').click #上传App按钮
 sleep 5
 
@@ -57,6 +59,6 @@ for os in android_os
 	os.set
 end
 
-dr.checkbox(:value, '178100390@qq.com').set
+dr.checkbox(:value, 'zhenhai.lai@changhong.com').set
 dr.element(:css,'#finish.green_button').click #提交测试按钮
 dr.quit
